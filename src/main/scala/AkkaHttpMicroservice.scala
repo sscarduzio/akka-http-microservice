@@ -32,7 +32,7 @@ trait Service extends Protocols {
   def config: Config
   val logger: LoggingAdapter
 
-  lazy val dbServiceConnectionFlow: Flow[HttpRequest, HttpResponse, Future[OutgoingConnection]] =
+  lazy val dbServiceConnectionFlow: Flow[HttpRequest, HttpResponse, Any] =
     Http().outgoingConnection(config.getString("services.db-srvc.host"), config.getInt("services.db-srvc.port"))
 
   def dbServiceRequest(request: HttpRequest): Future[HttpResponse] = Source.single(request).via(dbServiceConnectionFlow).runWith(Sink.head)
